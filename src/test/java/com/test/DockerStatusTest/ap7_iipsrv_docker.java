@@ -17,12 +17,12 @@ public class ap7_iipsrv_docker {
         String vmIpAddress = "172.20.23.50";
         String username = "hbp";
         String password = "Health#123";
-        String containerId = "ed012978fd21";
+        String containerName = "hbp_tapweb_iipsrv.1.5g4kvs6n2onf7vf406v8dulxy";
 
-        System.out.println("ap7 iipsrv Docker ID = " + containerId);
+        System.out.println("ap7 iipsrv Docker Name = " + containerName);
 
-        if (containerId.isEmpty()) {
-            System.out.println("Container ID is required.");
+        if (containerName.isEmpty()) {
+            System.out.println("Container Name is required.");
             return;
         }
 
@@ -33,9 +33,9 @@ public class ap7_iipsrv_docker {
             session.setConfig("StrictHostKeyChecking", "no");
             session.connect();
 
-            // Execute the docker inspect command to check the container's status
+            // Execute the docker inspect command to check the container's status by NAME
             ChannelExec channel = (ChannelExec) session.openChannel("exec");
-            channel.setCommand("docker inspect --format='{{.State.Status}}' " + containerId);
+            channel.setCommand("docker inspect --format='{{.State.Status}}' " + containerName);
             channel.setInputStream(null);
             channel.setErrStream(System.err);
             BufferedReader reader = new BufferedReader(new InputStreamReader(channel.getInputStream()));
@@ -67,7 +67,7 @@ public class ap7_iipsrv_docker {
 
     public void sendEmailAlert(String messageBody) {
         String from = "automationsoftware25@gmail.com";
-         // TO recipients
+        // TO recipients
         String[] to = {
             "nitheshkumar.s@htic.iitm.ac.in",
             "ramanan@htic.iitm.ac.in"
@@ -88,7 +88,7 @@ public class ap7_iipsrv_docker {
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
 
-       javax.mail.Session mailSession = javax.mail.Session.getInstance(props, new Authenticator() {
+        javax.mail.Session mailSession = javax.mail.Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }
